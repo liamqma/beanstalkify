@@ -1,11 +1,10 @@
-function* generator(i) {
-    yield i + 1;
-    yield i + 2;
-    yield i + 3;
-}
+var argv = require('yargs').argv;
 
-var gen = generator(10);
+var keyFile = argv.k;
+var archive = argv.a;
+var envName = argv.e;
+var stack = argv.s;
+var cname = argv.n;
+var config = argv.c;
+var output = argv.o;
 
-console.log(gen.next().value); // 11
-console.log(gen.next().value); // 12
-console.log(gen.next().value); // 13
