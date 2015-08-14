@@ -11,6 +11,7 @@
   "dependencies": {
     "aws-sdk": "^2.1.45",
     "q": "^1.4.1",
+    "winston": "^1.0.1",
     "yargs": "^3.18.0"
   },
   "devDependencies": {
