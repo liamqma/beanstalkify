@@ -1,6 +1,6 @@
 "use strict";
 
-var Archive = require('../lib/archive');
+var Archive = require('../dist/archive');
 var filename = __dirname + '/fixture/app-name-version.zip';
 
 describe('Archive', function(){
@@ -13,7 +13,4 @@ describe('Archive', function(){
         expect(archive.appName).to.equal('app-name');
 
     });
-
-
-
 });
