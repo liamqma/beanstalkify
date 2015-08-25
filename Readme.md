@@ -1,6 +1,8 @@
 [AWS Elastic Beanstalk](http://aws.amazon.com/elasticbeanstalk/) automation. A work in progress.
 This is the node version of [Ruby Beanstalkify](https://github.com/pranavraja/beanstalkify/) 
 
+[![Build Status](https://travis-ci.org/liamqma/beanstalkify.svg?branch=master)](https://travis-ci.org/liamqma/beanstalkify)
+
 ## Install
 ```bash
     npm install beanstalkify --save
