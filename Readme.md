@@ -2,6 +2,7 @@
 This is the node version of [Ruby Beanstalkify](https://github.com/pranavraja/beanstalkify/) 
 
 [![Build Status](https://travis-ci.org/liamqma/beanstalkify.svg?branch=master)](https://travis-ci.org/liamqma/beanstalkify)
+[![Coverage Status](https://coveralls.io/repos/liamqma/beanstalkify/badge.svg?branch=master&service=github)](https://coveralls.io/github/liamqma/beanstalkify?branch=master)
 
 ## Install
 ```bash
