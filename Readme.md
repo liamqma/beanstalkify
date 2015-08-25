@@ -22,6 +22,7 @@ var application = new Application(
     'PATH TO ZIP FILE',
     'ENVIRONMENT NAME',
     'CNAME',
+    '64bit Amazon Linux 2015.03 v2.0.0 running Node.js',
     [
         Beanstalk options
         ....
