@@ -13,7 +13,7 @@ gulp.task('test', function () {
     }));
 });
 
-gulp.task('lint', function(){
+gulp.task('lint', function() {
 
     return gulp.src(['lib/*.js'])
         .pipe(eslint())
