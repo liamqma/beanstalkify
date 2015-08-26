@@ -20,7 +20,6 @@ var application = new Application(
         region: 'ap-southeast-2'
     },
     'PATH TO ZIP FILE',
-    'ENVIRONMENT NAME',
     'CNAME',
     '64bit Amazon Linux 2015.03 v2.0.0 running Node.js',
     [
