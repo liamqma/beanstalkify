@@ -18,18 +18,21 @@ var application = new Application(
         accessKeyId: 'XXX',
         secretAccessKey: 'XXX',
         region: 'ap-southeast-2'
-    },
-    'PATH TO ZIP FILE',
-    'CNAME',
-    '64bit Amazon Linux 2015.03 v2.0.0 running Node.js',
-    [
+    }
+);
+
+application.deploy(
+{
+    archiveFilePath: 'PATH TO ZIP FILE',
+    environmentName: 'CNAME',
+    awsStackName: '64bit Amazon Linux 2015.03 v2.0.0 running Node.js',
+    beanstalkConfig: [
         Beanstalk options
         ....
     ],
-    'OUTPUT JSON FILE'
+    outputFile: 'OUTPUT JSON FILE'
+}
 );
-
-application.deploy();
 ```
 
 ## Test
