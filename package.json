@@ -1,6 +1,6 @@
 {
   "name": "beanstalkify",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "AWS Elastic Beanstalk automation",
   "repository": {
     "type": "git",
@@ -16,7 +16,6 @@
     "async": "^1.4.2",
     "aws-sdk": "^2.1.45",
     "js-yaml": "^3.3.1",
-    "jsonfile": "^2.2.1",
     "q": "^1.4.1",
     "winston": "^1.0.1",
     "yargs": "^3.18.0"

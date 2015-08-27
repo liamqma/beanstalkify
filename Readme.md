@@ -29,10 +29,11 @@ application.deploy(
     beanstalkConfig: [
         Beanstalk options
         ....
-    ],
-    outputFile: 'OUTPUT JSON FILE'
+    ]
 }
-);
+).then(function(data){
+    console.log(data); # {app_name: 'test-website', app_version: 'foo', env_name: 'test-website-prod'}
+});
 ```
 
 ## Test
@@ -40,3 +41,9 @@ application.deploy(
 ```bash
 npm test
 ```
+
+## Release notes
+0.0.4 / 2015-08-27
+===================
+
+  * Return environment details from promise chain instead of writing it to a JSON file
