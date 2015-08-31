@@ -43,6 +43,11 @@ npm test
 ```
 
 ## Release notes
+0.0.5 / 2015-08-31
+===================
+
+  * Use `process.stdout.write` instead of `console.log` to output dots while waiting
+  
 0.0.4 / 2015-08-27
 ===================
 
