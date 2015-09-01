@@ -45,7 +45,7 @@ npm test
 <table id="contributors"><tr><td><img src=https://avatars.githubusercontent.com/u/4413219?v=3><a href="https://github.com/liamqma">liamqma</a></td><td><img src=https://avatars.githubusercontent.com/u/670701?v=3><a href="https://github.com/Maxwell2022">Maxwell2022</a></td><td><img src=https://avatars.githubusercontent.com/u/46142?v=3><a href="https://github.com/joshhunt">joshhunt</a></td></tr></table>
 
 ## Release notes
-0.0.5 / 2015-09-01
+0.0.6 / 2015-09-01
 ===================
 
   * Do not catch the errors and let the deploy method rejecting the promise, catching errors was resolving the deploy promise
