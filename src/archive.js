@@ -1,29 +1,35 @@
 "use strict";
-var path = require('path');
-var q = require('q');
-var winston = require('winston');
-var fs = require('fs');
+import path from 'path';
+import q from 'q';
+import winston from 'winston';
+import fs from 'fs';
 
 class Archive {
     /**
+     * @param {string} filePath - The path of archive to deploy
      * @param {object} s3 - AWS SDK S3 service interface object
      * @param {object} elasticbeanstalk - AWS SDK S3 service interface object
      * @constructor
      */
-    constructor(s3, elasticbeanstalk) {
+    constructor(filePath, s3, elasticbeanstalk) {
         this.elasticbeanstalk = elasticbeanstalk;
         this.s3 = s3;
+        this.filePath = filePath;
+        this.archiveName = path.basename(filePath); // website-a-4543cbf.zip
+        let baseName = path.basename(filePath, path.extname(filePath)).split('-'); // ['website', 'a', '4543cbf']
+        this.version = baseName.pop(); // '4543cbf'
+        this.appName = baseName.join('-'); // 'website-a'
     }
 
     upload() {
         return this.alreadyUploaded()
-            .then(function (data) {
+            .then((data) => {
                 if (data) {
                     return winston.info(this.version + 'is already uploaded.');
                 } else {
                     return this.doUpload();
                 }
-            }.bind(this));
+            });
     }
 
     doUpload() {
@@ -56,7 +62,7 @@ class Archive {
         this.s3.putObject({
             Bucket: bucket,
             Key: this.archiveName,
-            Body: fs.readFileSync(this.filename)
+            Body: fs.readFileSync(this.filePath)
         }, function (err) {
             if (err) {
                 defer.reject(err);
