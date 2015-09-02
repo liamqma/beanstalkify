@@ -15,7 +15,7 @@
         "test": "gulp",
         "build": "gulp build",
         "coverage": "gulp coverage",
-        "prepublish": "grunt build"
+        "prepublish": "gulp build"
     },
     "author": "",
     "license": "ISC",
