@@ -71,5 +71,9 @@ gulp.task('coveralls', () => {
         .pipe(coveralls());
 });
 
+gulp.task('watch', ['test'], () => {
+    gulp.watch(['src/**/*', 'test/**/*'], ['test']);
+});
+
 gulp.task('default', ['test']);
 gulp.task('lint', ['lint-src', 'lint-test']);
