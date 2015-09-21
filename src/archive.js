@@ -87,7 +87,7 @@ class Archive {
             AutoCreateApplication: true
         }, function (err, data) {
             if (err) {
-                defer.resolve(false);
+                defer.reject(err);
             } else {
                 defer.resolve(data);
             }

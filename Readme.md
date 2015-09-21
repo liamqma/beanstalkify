@@ -41,13 +41,17 @@ application.deploy(
 ```bash
 npm test
 ```
+## Release notes
+0.0.8 / 2015-09-21
+===================
+
+  * Reject promise if error occurs during 'makeApplicationVersionAvailableToBeanstalk'
 
 0.0.7 / 2015-09-03
 ===================
 
   * Use es6 via babel.js
   
-## Release notes
 0.0.6 / 2015-09-01
 ===================
 
