@@ -87,7 +87,8 @@ class Archive {
             AutoCreateApplication: true
         }, function (err, data) {
             if (err) {
-                defer.reject(err);
+                winston.error(err.message);
+                defer.resolve(false);
             } else {
                 defer.resolve(data);
             }
