@@ -7,6 +7,7 @@ import del from 'del';
 import path from 'path';
 import plumber from 'gulp-plumber';
 import eslint from 'gulp-eslint';
+import coveralls from 'gulp-coveralls';
 import {Instrumenter} from 'isparta'
 
 // Remove the built files
@@ -75,5 +76,5 @@ gulp.task('watch', ['test'], () => {
     gulp.watch(['src/**/*', 'test/**/*'], ['test']);
 });
 
-gulp.task('default', ['test']);
+gulp.task('default', ['coverage']);
 gulp.task('lint', ['lint-src', 'lint-test']);
