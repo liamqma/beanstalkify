@@ -4,6 +4,6 @@ export default (archive, environment, describedEnvironment) => {
         app_name: archive.appName,
         app_version: archive.version,
         env_name: environment.name,
-        env_cname: describedEnvironment.CNAME
+        env_url: describedEnvironment.CNAME
     };
 };
