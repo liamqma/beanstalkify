@@ -32,7 +32,7 @@ application.deploy(
     ]
 }
 ).then(function(data){
-    console.log(data); # {app_name: 'test-website', app_version: 'foo', env_name: 'test-website-prod'}
+    console.log(data); # {app_name: 'test-website', app_version: 'foo', env_name: 'test-website-prod', env_cname: 'tech-website-12345.ap-southeast-2.elasticbeanstalk.com'}
 });
 ```
 
@@ -42,6 +42,11 @@ application.deploy(
 npm test
 ```
 ## Release notes
+0.0.10 / 2016-01-22
+===================
+
+  * Add 'env_cname' to returned data
+  
 0.0.8 / 2015-09-21
 ===================
 

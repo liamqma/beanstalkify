@@ -55,6 +55,7 @@ class Application {
                     });
             })
             .then(environment.waitUtilHealthy.bind(environment))
+            .then(environment.describeEnvironment.bind(environment))
             .then(deploymentInfo.bind(null, archive, environment));
     }
 }

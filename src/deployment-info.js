@@ -1,8 +1,9 @@
 "use strict";
-export default (archive, environment) => {
+export default (archive, environment, describedEnvironment) => {
     return {
         app_name: archive.appName,
         app_version: archive.version,
-        env_name: environment.name
+        env_name: environment.name,
+        env_cname: describedEnvironment.CNAME
     };
 };

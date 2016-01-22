@@ -8,7 +8,7 @@ import path from 'path';
 import plumber from 'gulp-plumber';
 import eslint from 'gulp-eslint';
 import coveralls from 'gulp-coveralls';
-import {Instrumenter} from 'isparta'
+import {Instrumenter} from 'isparta';
 
 // Remove the built files
 gulp.task('clean', () => {
