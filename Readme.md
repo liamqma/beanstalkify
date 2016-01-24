@@ -42,6 +42,11 @@ application.deploy(
 npm test
 ```
 ## Release notes
+0.0.12 / 2016-01-24
+===================
+
+  * Upgrade babel 5 to 6
+  
 0.0.11 / 2016-01-22
 ===================
 
