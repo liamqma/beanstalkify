@@ -1,18 +1,9 @@
-'use strict';
-
 import Archive from '../src/archive';
 import path from 'path';
 import q from 'q';
 const filePath = path.join(__dirname, '/fixture/app-name-version.zip');
 
 describe('Archive', function () {
-
-    beforeEach(function () {
-        sinon.stub(process, 'nextTick').yields();
-    });
-    afterEach(function () {
-        process.nextTick.restore();
-    });
 
     describe('constructor', () => {
         it('should should parse file name', () => {
@@ -26,14 +17,16 @@ describe('Archive', function () {
     });
 
     describe('upload', () => {
-        it('should should trigger doUpload() if not already uploaded', () => {
+        it('should should trigger doUpload() if not already uploaded', (done) => {
             var archive = new Archive(filePath);
             archive.doUpload = sinon.spy();
             archive.alreadyUploaded = () => {
                 return q(false);
             };
-            archive.upload();
-            expect(archive.doUpload).to.have.been.called;
+            archive.upload().then(() => {
+                expect(archive.doUpload).to.have.been.called;
+                done();
+            });
         });
     });
 

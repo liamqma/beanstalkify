@@ -1,10 +1,10 @@
 "use strict";
-const Archive = require('./archive');
-const Environment = require('./environment');
-const deploymentInfo = require('./deployment-info');
-const AWS = require('aws-sdk');
-const winston = require('winston');
-const q = require('q');
+import Archive from './archive';
+import Environment from './environment';
+import deploymentInfo from './deployment-info';
+import AWS from 'aws-sdk';
+import winston from 'winston';
+import q from 'q';
 
 
 class Application {

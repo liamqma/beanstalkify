@@ -1,2 +1,2 @@
 "use strict";
-module.exports = require('./application');
+module.exports = require('./application').default;

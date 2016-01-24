@@ -1,7 +1,7 @@
 "use strict";
-const q = require('q');
-const winston = require('winston');
-const async = require('async');
+import q from 'q';
+import winston from 'winston';
+import async from 'async';
 
 const POLL_INTERVAL = 5;
 const STATUS_CHANGE_TIMEOUT = 1200;
