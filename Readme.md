@@ -42,6 +42,11 @@ application.deploy(
 npm test
 ```
 ## Release notes
+0.0.13 / 2016-01-27
+===================
+
+  * Bugfix: check if application version already uploaded
+  
 0.0.12 / 2016-01-24
 ===================
 
