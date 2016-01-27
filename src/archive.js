@@ -25,7 +25,7 @@ class Archive {
         return this.alreadyUploaded()
             .then((data) => {
                 if (data) {
-                    return winston.info(this.version + 'is already uploaded.');
+                    return winston.info(this.version + ' is already uploaded.');
                 } else {
                     return this.doUpload();
                 }
@@ -108,7 +108,7 @@ class Archive {
             if (err) {
                 defer.reject(err);
             } else {
-                if (data.ApplicationVersions.length > 1) {
+                if (data.ApplicationVersions.length > 0) {
                     defer.resolve(true);
                 } else {
                     defer.resolve(false);
