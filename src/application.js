@@ -1,5 +1,6 @@
 "use strict";
-import Archive from './archive';
+import "babel-polyfill";
+import {upload} from './archive';
 import Environment from './environment';
 import deploymentInfo from './deployment-info';
 import AWS from 'aws-sdk';
@@ -36,27 +37,26 @@ class Application {
         let stack = args.awsStackName;
         let config = args.beanstalkConfig;
 
-        let archive = new Archive(archivePath, this.s3, this.elasticbeanstalk);
-        let environment = new Environment(archive, cname, stack, config, this.elasticbeanstalk);
+        let environment = new Environment(cname, stack, config, this.elasticbeanstalk);
 
-        return archive.upload()
-            .then(function () {
+        return upload({elasticbeanstalk: this.elasticbeanstalk, s3: this.s3}, archivePath)
+            .then(function ({versionLabel, applicationName}) {
                 return environment.status()
                     .then(function (env) {
                         if (!env) {
-                            winston.info('Create stack ' + stack + ' for ' + archive.appName + '-' + archive.version);
-                            return environment.create(cname).then(environment.waitUntilStatusIsNot.bind(environment, 'Launching'));
+                            winston.info('Create stack ' + stack + ' for ' + applicationName + '-' + versionLabel);
+                            return environment.create(applicationName, versionLabel, cname).then(environment.waitUntilStatusIsNot.bind(environment, 'Launching'));
                         } else {
 
-                            winston.info('Deploying ' + archive.version + ' to ' + environment.name + '...');
-                            return environment.deploy().then(environment.waitUntilStatusIsNot.bind(environment, 'Updating'));
+                            winston.info('Deploying ' + versionLabel + ' to ' + environment.name + '...');
+                            return environment.deploy(versionLabel).then(environment.waitUntilStatusIsNot.bind(environment, 'Updating'));
                         }
 
                     });
             })
             .then(environment.waitUtilHealthy.bind(environment))
             .then(environment.describeEnvironment.bind(environment))
-            .then(deploymentInfo.bind(null, archive, environment));
+            .then(deploymentInfo.bind(null, environment));
     }
 }
 

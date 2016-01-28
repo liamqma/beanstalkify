@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import 'babel-core/register';
-import {alreadyUploaded} from '../src/archive';
+import {alreadyUploaded, parse} from '../src/archive';
 
 /* Test alreadyUploaded */
 test('alreadyUploaded() should return true if version exists', function *(t) {
@@ -24,10 +24,19 @@ test('describeApplicationVersions should receive proper arguments', function *(t
     const versionLabel = 'Version Label';
 
     const describeApplicationVersions = (params, callback) => {
-        t.is(params.applicationName, applicationName);
-        t.is(params.versionLabel, versionLabel);
+        t.is(params.ApplicationName, applicationName);
+        t.same(params.VersionLabels, [versionLabel]);
         callback(null, {ApplicationVersions: []});
     };
 
     yield alreadyUploaded({describeApplicationVersions}, applicationName, versionLabel);
 });
+
+/* Test parse */
+test('it should parse file name', t => {
+    const result = parse('/foo/bar/app-name-version.zip');
+    t.is(result.archiveName, 'app-name-version.zip');
+    t.is(result.versionLabel, 'version');
+    t.is(result.applicationName, 'app-name');
+});
+

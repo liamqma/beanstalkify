@@ -9,8 +9,7 @@ const HEALTHY_TIMEOUT = 120;
 
 class Environment {
 
-    constructor(archive, cname, stack, config, elasticbeanstalk) {
-        this.archive = archive;
+    constructor(cname, stack, config, elasticbeanstalk) {
         this.name = cname;
         this.elasticbeanstalk = elasticbeanstalk;
         this.config = config;
@@ -49,10 +48,12 @@ class Environment {
      * Assuming the archive has already been uploaded,
      * create a new environment with the app deployed onto the provided stack.
      * Attempts to use the first available cname in the cnames array.
+     * @param {string} applicationName applicationName
+     * @param {string} versionLabel versionLabel
      * @param {string} cname CNAME prefixes to try
      * @returns {promise} Promise
      */
-    create(cname) {
+    create(applicationName, versionLabel, cname) {
         return this.checkDNSAvailability()
             .then((availability) => {
 
@@ -62,8 +63,8 @@ class Environment {
 
                 let defer = q.defer();
                 this.elasticbeanstalk.createEnvironment({
-                    ApplicationName: this.archive.appName,
-                    VersionLabel: this.archive.version,
+                    ApplicationName: applicationName,
+                    VersionLabel: versionLabel,
                     EnvironmentName: this.name,
                     SolutionStackName: this.stack,
                     OptionSettings: this.config,
@@ -94,10 +95,10 @@ class Environment {
         return defer.promise;
     }
 
-    deploy() {
+    deploy(versionLabel) {
         let defer = q.defer();
         this.elasticbeanstalk.updateEnvironment({
-            VersionLabel: this.archive.version,
+            VersionLabel: versionLabel,
             EnvironmentName: this.name,
             OptionSettings: this.config
         }, function (err, data) {
