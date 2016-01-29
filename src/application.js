@@ -1,6 +1,6 @@
 "use strict";
 import "babel-polyfill";
-import {upload} from './archive';
+import Archive from './archive';
 import Environment from './environment';
 import deploymentInfo from './deployment-info';
 import AWS from 'aws-sdk';
@@ -38,8 +38,9 @@ class Application {
         let config = args.beanstalkConfig;
 
         let environment = new Environment(cname, stack, config, this.elasticbeanstalk);
+        const archive = new Archive(this.elasticbeanstalk, this.s3);
 
-        return upload({elasticbeanstalk: this.elasticbeanstalk, s3: this.s3}, archivePath)
+        return archive.upload(archivePath)
             .then(function ({versionLabel, applicationName}) {
                 return environment.status()
                     .then(function (env) {
