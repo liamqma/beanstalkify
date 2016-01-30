@@ -1,7 +1,9 @@
 "use strict";
-export default (environment, describedEnvironment) => {
+export default (environmentDescription) => {
     return {
-        env_name: environment.name,
-        env_url: describedEnvironment.CNAME
+        app_name: environmentDescription.ApplicationName,
+        app_version: environmentDescription.VersionLabel,
+        env_name: environmentDescription.EnvironmentName,
+        env_url: environmentDescription.CNAME
     };
 };

@@ -32,32 +32,30 @@ class Application {
      * @returns {promise} Promise
      */
     deploy(args) {
-        let archivePath = args.archiveFilePath;
-        let cname = args.environmentName;
-        let stack = args.awsStackName;
-        let config = args.beanstalkConfig;
 
-        let environment = new Environment(cname, stack, config, this.elasticbeanstalk);
+        const archivePath = args.archiveFilePath;
+        const environmentName = args.environmentName;
+        const stack = args.awsStackName;
+        const config = args.beanstalkConfig;
+
+        const environment = new Environment(this.elasticbeanstalk);
         const archive = new Archive(this.elasticbeanstalk, this.s3);
 
-        return archive.upload(archivePath)
-            .then(function ({versionLabel, applicationName}) {
-                return environment.status()
-                    .then(function (env) {
-                        if (!env) {
-                            winston.info('Create stack ' + stack + ' for ' + applicationName + '-' + versionLabel);
-                            return environment.create(applicationName, versionLabel, cname).then(environment.waitUntilStatusIsNot.bind(environment, 'Launching'));
-                        } else {
-
-                            winston.info('Deploying ' + versionLabel + ' to ' + environment.name + '...');
-                            return environment.deploy(versionLabel).then(environment.waitUntilStatusIsNot.bind(environment, 'Updating'));
-                        }
-
-                    });
-            })
-            .then(environment.waitUtilHealthy.bind(environment))
-            .then(environment.describeEnvironment.bind(environment))
-            .then(deploymentInfo.bind(null, environment));
+        return q.async(function* () {
+            const {versionLabel, applicationName} = yield archive.upload(archivePath);
+            const env = yield environment.status(environmentName);
+            if (env) {
+                winston.info('Deploying ' + versionLabel + ' to ' + environment.name + '...');
+                yield environment.deploy(versionLabel, environmentName, config);
+                yield environment.waitUntilStatusIsNot('Updating', environmentName);
+            } else {
+                winston.info('Create stack ' + stack + ' for ' + applicationName + '-' + versionLabel);
+                yield environment.create(applicationName, environmentName, versionLabel, stack, config);
+                yield environment.waitUntilStatusIsNot('Launching', environmentName);
+            }
+            const environmentDescription = yield environment.waitUtilHealthy(environmentName);
+            return deploymentInfo(environmentDescription);
+        })();
     }
 }
 

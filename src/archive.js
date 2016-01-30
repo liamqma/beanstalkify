@@ -84,7 +84,7 @@ class Archive {
     /**
      * Upload artifact to application and make application version available
      * @param {string} filePath - File path of the artifact
-     * @returns {promise} Promise
+     * @returns {Promise.<T>} Promise
      */
     upload(filePath) {
 
