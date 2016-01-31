@@ -41,47 +41,11 @@ application.deploy(
 ```bash
 npm test
 ```
-## Release notes
-0.0.12 / 2016-01-24
-===================
 
-  * Upgrade babel 5 to 6
-  
-0.0.11 / 2016-01-22
-===================
+## Change Log
 
-  * Change 'env_cname' to 'env_url'
-  
-0.0.10 / 2016-01-22
-===================
-
-  * Add 'env_cname' to returned data
-  
-0.0.8 / 2015-09-21
-===================
-
-  * Reject promise if error occurs during 'makeApplicationVersionAvailableToBeanstalk'
-
-0.0.7 / 2015-09-03
-===================
-
-  * Use es6 via babel.js
-  
-0.0.6 / 2015-09-01
-===================
-
-  * Do not catch the errors and let the deploy method rejecting the promise, catching errors was resolving the deploy promise
-  * Reject 'waitUtilHealthy' if environment is not healthy (no Green)
-  
-0.0.5 / 2015-08-31
-===================
-
-  * Use `process.stdout.write` instead of `console.log` to output dots while waiting
-  
-0.0.4 / 2015-08-27
-===================
-
-  * Return environment details from promise chain instead of writing it to a JSON file
+This project adheres to [Semantic Versioning](http://semver.org/).  
+Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/liamqma/beanstalkify/releases) page.
   
 ## Contributors
 <table id="contributors"><tr><td><img src=https://avatars.githubusercontent.com/u/4413219?v=3><a href="https://github.com/liamqma">liamqma</a></td><td><img src=https://avatars.githubusercontent.com/u/670701?v=3><a href="https://github.com/Maxwell2022">Maxwell2022</a></td><td><img src=https://avatars.githubusercontent.com/u/46142?v=3><a href="https://github.com/joshhunt">joshhunt</a></td></tr></table>
