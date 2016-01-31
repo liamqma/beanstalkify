@@ -21,6 +21,10 @@ class Application {
         // AWS Services
         this.s3 = new AWS.S3(credentials);
         this.elasticbeanstalk = new AWS.ElasticBeanstalk(credentials);
+
+        // DI AWS Services
+        this.environment = new Environment(this.elasticbeanstalk);
+        this.archive = new Archive(this.elasticbeanstalk, this.s3);
     }
 
     /**
@@ -38,24 +42,32 @@ class Application {
         const stack = args.awsStackName;
         const config = args.beanstalkConfig;
 
-        const environment = new Environment(this.elasticbeanstalk);
-        const archive = new Archive(this.elasticbeanstalk, this.s3);
-
         return q.async(function* () {
-            const {versionLabel, applicationName} = yield archive.upload(archivePath);
-            const env = yield environment.status(environmentName);
+
+            // Upload artifact
+            const {versionLabel, applicationName} = yield this.archive.upload(archivePath);
+
+            // Get environment status
+            const env = yield this.environment.status(environmentName);
+
+            // If environment does not exist, create a new environment
+            // Otherwise, update environment with new version
             if (env) {
-                winston.info('Deploying ' + versionLabel + ' to ' + environment.name + '...');
-                yield environment.deploy(versionLabel, environmentName, config);
-                yield environment.waitUntilStatusIsNot('Updating', environmentName);
+                winston.info(`Deploying ${versionLabel} to ${environmentName}...`);
+                yield this.environment.deploy(versionLabel, environmentName, config);
+                yield this.environment.waitUntilStatusIsNot('Updating', environmentName);
             } else {
-                winston.info('Create stack ' + stack + ' for ' + applicationName + '-' + versionLabel);
-                yield environment.create(applicationName, environmentName, versionLabel, stack, config);
-                yield environment.waitUntilStatusIsNot('Launching', environmentName);
+                winston.info(`Create stack ${stack} for ${applicationName} - ${versionLabel}`);
+                yield this.environment.create(applicationName, environmentName, versionLabel, stack, config);
+                yield this.environment.waitUntilStatusIsNot('Launching', environmentName);
             }
-            const environmentDescription = yield environment.waitUtilHealthy(environmentName);
+
+            // Wait until environment is ready or timeout
+            const environmentDescription = yield this.environment.waitUtilHealthy(environmentName);
+
+            // Return environment info to user
             return deploymentInfo(environmentDescription);
-        })();
+        }.bind(this))();
     }
 }
 
