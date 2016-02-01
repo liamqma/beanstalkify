@@ -130,7 +130,7 @@ class Environment {
     }
 
     checkDNSAvailability(environmentName) {
-        winston.info(`Check ${environmentName}  availability`);
+        winston.info(`Check ${environmentName} availability`);
         return q.ninvoke(
             this.elasticbeanstalk,
             'checkDNSAvailability',
@@ -138,6 +138,20 @@ class Environment {
                 CNAMEPrefix: environmentName
             }
         ).then(data => data.Available);
+    }
+
+    terminate(environmentName) {
+
+        winston.info(`Terminating Environment named ${environmentName}...`);
+
+        return q.ninvoke(
+            this.elasticbeanstalk,
+            'terminateEnvironment',
+            {
+                EnvironmentName: environmentName
+            }
+        );
+
     }
 }
 

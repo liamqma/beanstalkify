@@ -69,6 +69,21 @@ class Application {
             return deploymentInfo(environmentDescription);
         }.bind(this))();
     }
+
+    terminateEnvironment() {
+        return this.environment.terminate.apply(this.environment, arguments);
+    }
+
+    deleteApplication(applicationName, terminateEnvByForce = false) {
+        return q.ninvoke(
+            this.elasticbeanstalk,
+            'deleteApplication',
+            {
+                ApplicationName: applicationName,
+                TerminateEnvByForce: terminateEnvByForce
+            }
+        );
+    }
 }
 
 export default Application;
