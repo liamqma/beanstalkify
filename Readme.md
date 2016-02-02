@@ -1,4 +1,4 @@
-[AWS Elastic Beanstalk](http://aws.amazon.com/elasticbeanstalk/) automation. A work in progress.
+[AWS Elastic Beanstalk](http://aws.amazon.com/elasticbeanstalk/) automation.
 This is the node version of [Ruby Beanstalkify](https://github.com/pranavraja/beanstalkify/) 
 
 [![Build Status](https://travis-ci.org/liamqma/beanstalkify.svg?branch=master)](https://travis-ci.org/liamqma/beanstalkify)
