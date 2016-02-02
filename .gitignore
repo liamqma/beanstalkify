@@ -27,6 +27,7 @@ bower_components
 
 # Ignore .env configuration files
 .env
+credentials.json
 
 # Ignore .DS_Store files on OS X
 .DS_Store

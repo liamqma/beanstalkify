@@ -36,12 +36,14 @@
     "babel-register": "^6.4.3",
     "coveralls": "^2.11.6",
     "del": "^2.0.0",
+    "faker": "^3.0.1",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-eslint": "^1.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "nyc": "^5.5.0",
+    "request": "^2.69.0",
     "sinon": "^1.15.4"
   }
 }

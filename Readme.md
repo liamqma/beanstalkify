@@ -42,6 +42,18 @@ application.deploy(
 npm test
 ```
 
+## Acceptance test
+1. Create `credentials.json` within folder `acceptance`
+```JSON
+{
+    "accessKeyId": "XXX",
+    "secretAccessKey": "XXX",
+    "region": "ap-southeast-2"
+}
+```
+2. Run `node acceptance/index.js`
+3. It should create automatically two random elasticbeanstalk environments 
+
 ## Change Log
 
 This project adheres to [Semantic Versioning](http://semver.org/).  
