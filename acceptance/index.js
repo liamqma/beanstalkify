@@ -8,8 +8,8 @@ var faker = require('faker');
 
 var application = new Application(credentials);
 
-var environmentNameProd = faker.name.firstName() + '-' + faker.name.lastName() + '-' + faker.random.number() + '-prod';
-var environmentNameStag = faker.name.firstName() + '-' + faker.name.lastName() + '-' + faker.random.number() + '-stag';
+var environmentNameProd = faker.name.firstName().toLowerCase() + '-' + faker.random.number() + '-prod';
+var environmentNameStag = faker.name.firstName().toLowerCase() + '-' + faker.random.number() + '-stag';
 var applicationName = 'tech-website';
 var versionLabel = 'e812ud';
 
