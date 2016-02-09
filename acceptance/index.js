@@ -5,6 +5,7 @@ var assert = require('assert');
 var request = require('request');
 var q = require('q');
 var faker = require('faker');
+var _ = require('lodash');
 
 var application = new Application(credentials);
 
@@ -73,6 +74,44 @@ application.deploy({
     });
 
     return deferred.promise;
+
+}).then(function () {
+
+    return q.all([
+        application.archive.upload(__dirname + '/tech-website-foo.zip'),
+        application.archive.upload(__dirname + '/tech-website-bar.zip'),
+        application.archive.upload(__dirname + '/tech-website-e812ud.zip')
+    ]);
+
+}).then(function () {
+
+    return q.ninvoke(application.elasticbeanstalk, 'describeApplicationVersions', {
+        ApplicationName: applicationName
+    });
+
+}).then(function (data) {
+
+    var versions = _.map(data.ApplicationVersions, 'VersionLabel');
+    assert.equal(versions.length, 3);
+    assert(versions.indexOf('foo') >= 0);
+    assert(versions.indexOf('bar') >= 0);
+    assert(versions.indexOf('e812ud') >= 0);
+
+}).then(function () {
+
+    return application.cleanApplicationVersions(applicationName);
+
+}).then(function () {
+
+    return q.ninvoke(application.elasticbeanstalk, 'describeApplicationVersions', {
+        ApplicationName: applicationName
+    });
+
+}).then(function () {
+
+    var versions = _.map(data.ApplicationVersions, 'VersionLabel');
+    assert.equal(versions.length, 1);
+    assert(versions.indexOf('e812ud') >= 0);
 
 }).then(function () {
 

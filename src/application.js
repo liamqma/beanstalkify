@@ -74,6 +74,10 @@ class Application {
         return this.environment.terminate.apply(this.environment, arguments);
     }
 
+    cleanApplicationVersions() {
+        return this.environment.cleanApplicationVersions.apply(this.environment, arguments);
+    }
+
     deleteApplication(applicationName, terminateEnvByForce = false) {
         return q.ninvoke(
             this.elasticbeanstalk,

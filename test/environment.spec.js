@@ -95,3 +95,44 @@ test('waitUtilHealthy() should wait until timeout if not healthy', t => {
     });
 });
 
+/* Test cleanApplicationVersions */
+test('cleanApplicationVersions should delete versions not in use', function *(t) {
+
+    // Stub
+    const elasticbeanstalkStub = {
+        describeEnvironments: sinon.stub(),
+        describeApplicationVersions: sinon.stub()
+    };
+    elasticbeanstalkStub.describeEnvironments.yields(null, {Environments: [
+        {VersionLabel: 'foo'}
+    ]});
+    elasticbeanstalkStub.describeApplicationVersions.yields(null, {ApplicationVersions: [
+        {VersionLabel: 'foo'},
+        {VersionLabel: 'bar'},
+        {VersionLabel: 'baz'}
+    ]});
+
+    // Act
+    const environment = new Environment(elasticbeanstalkStub);
+    environment.deleteApplicationVersion = sinon.stub();
+    yield environment.cleanApplicationVersions('tech-website');
+
+    // Assert
+    t.true(environment.deleteApplicationVersion.withArgs({
+        ApplicationName: 'tech-website',
+        VersionLabel: 'bar',
+        DeleteSourceBundle: true
+    }).calledOnce);
+
+    t.true(environment.deleteApplicationVersion.withArgs({
+        ApplicationName: 'tech-website',
+        VersionLabel: 'baz',
+        DeleteSourceBundle: true
+    }).calledOnce);
+
+    t.false(environment.deleteApplicationVersion.withArgs({
+        ApplicationName: 'tech-website',
+        VersionLabel: 'foo',
+        DeleteSourceBundle: true
+    }).called);
+});
