@@ -107,7 +107,7 @@ application.deploy({
         ApplicationName: applicationName
     });
 
-}).then(function () {
+}).then(function (data) {
 
     var versions = _.map(data.ApplicationVersions, 'VersionLabel');
     assert.equal(versions.length, 1);
