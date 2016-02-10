@@ -36,7 +36,12 @@ application.deploy(
 });
 ```
 
-## Test
+## Clean application versions
+```javascript
+application.cleanApplicationVersions('application name'); // Returns a promise
+```
+
+## Unit test
 
 ```bash
 npm test
