@@ -21,6 +21,7 @@ var application = new Application(
     }
 );
 
+// Deploy
 application.deploy(
 {
     archiveFilePath: 'PATH TO ZIP FILE',
@@ -34,10 +35,8 @@ application.deploy(
 ).then(function(data){
     console.log(data); # {app_name: 'test-website', app_version: 'foo', env_name: 'test-website-prod', env_url: 'tech-website-12345.ap-southeast-2.elasticbeanstalk.com'}
 });
-```
 
-## Clean application versions
-```javascript
+// Clean application versions
 application.cleanApplicationVersions('application name'); // Returns a promise
 ```
 
