@@ -1,6 +1,7 @@
 "use strict";
 import q from 'q';
 import winston from 'winston';
+import _ from 'lodash';
 
 const POLL_INTERVAL = 5; // In seconds
 const STATUS_CHANGE_TIMEOUT = 1200; // In seconds
@@ -152,6 +153,49 @@ class Environment {
             }
         );
 
+    }
+
+    /**
+     * @param {object} params - e.g. {ApplicationName: 'XXX', VersionLabel: 'XXX', DeleteSourceBundle: true}
+     * @returns {promise}
+     */
+    deleteApplicationVersion(params) {
+        return q.ninvoke(this.elasticbeanstalk, 'deleteApplicationVersion', params);
+    }
+
+    /**
+     * Delete application versions based on application name
+     * @param {string} applicationName
+     * @returns {promise}
+     */
+    cleanApplicationVersions(applicationName) {
+
+        winston.info(`Clean application versions of ${applicationName}...`);
+
+        return q.async(function* () {
+
+            const applicationVersions = _.map((yield q.ninvoke(this.elasticbeanstalk, 'describeApplicationVersions', {
+                ApplicationName: applicationName
+            })).ApplicationVersions, 'VersionLabel');
+
+            const applicationVersionsToKeep = _.map((yield q.ninvoke(this.elasticbeanstalk, 'describeEnvironments', {
+                ApplicationName: applicationName,
+                IncludeDeleted: false
+            })).Environments, 'VersionLabel');
+
+            const applicationVersionsToDelete = _.difference(applicationVersions, applicationVersionsToKeep);
+
+            for (const version of applicationVersionsToDelete) {
+
+                winston.info(`Delete version: ${version}`);
+
+                yield this.deleteApplicationVersion({
+                    ApplicationName: applicationName,
+                    VersionLabel: version,
+                    DeleteSourceBundle: true
+                });
+            }
+        }.bind(this))();
     }
 }
 
