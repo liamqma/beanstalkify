@@ -1,4 +1,3 @@
-"use strict";
 import q from 'q';
 import winston from 'winston';
 import _ from 'lodash';

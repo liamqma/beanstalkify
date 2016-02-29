@@ -1,4 +1,3 @@
-"use strict";
 export default (environmentDescription) => {
     return {
         app_name: environmentDescription.ApplicationName,

@@ -1,4 +1,3 @@
-"use strict";
 import "babel-polyfill";
 import Archive from './archive';
 import Environment from './environment';
