@@ -110,6 +110,9 @@ class Environment {
             while (timeLeft > 0 && environmentDescription.Health !== 'Green') {
                 process.stdout.write('.');
                 environmentDescription = yield this.describeEnvironment(environmentName);
+                if (typeof environmentDescription !== 'object') {
+                    throw new Error(`Failed to heath check environment: ${environmentName}. Maybe the environment is terminated.`);
+                }
                 timeLeft = timeLeft - POLL_INTERVAL;
                 yield this.wait(POLL_INTERVAL);
             }
