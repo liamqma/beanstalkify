@@ -68,18 +68,18 @@ test('waitUntilStatusIsNot() should wait', function *(t) {
 });
 
 /* Test waitUtilHealthy */
-test('waitUtilHealthy() should wait until health', function *(t) {
+test('waitUtilHealthy() should wait until health and status is ready', function *(t) {
     const environment = new Environment();
     const describeEnvironmentStub = sinon.stub(environment, 'describeEnvironment');
     const waitStub = sinon.stub(environment, 'wait', () => q());
 
     describeEnvironmentStub.onCall(0).returns(q({Health: 'foo'}));
     describeEnvironmentStub.onCall(1).returns(q({Health: 'foo'}));
-    describeEnvironmentStub.onCall(2).returns(q({Health: 'Green'}));
+    describeEnvironmentStub.onCall(2).returns(q({Health: 'Green', Status: 'Ready'}));
 
     const environmentDescription = yield environment.waitUtilHealthy();
     t.is(waitStub.callCount, 3);
-    t.same(environmentDescription, {Health: 'Green'});
+    t.same(environmentDescription, {Health: 'Green', Status: 'Ready'});
 });
 
 test('waitUtilHealthy() should wait until timeout if not healthy', t => {
