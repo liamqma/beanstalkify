@@ -107,7 +107,7 @@ class Environment {
             let timeLeft = HEALTHY_TIMEOUT;
             let environmentDescription = {};
 
-            while (timeLeft > 0 && environmentDescription.Health !== 'Green') {
+            while (timeLeft > 0 && (environmentDescription.Health !== 'Green' || environmentDescription.Status !== 'Ready')) {
                 process.stdout.write('.');
                 environmentDescription = yield this.describeEnvironment(environmentName);
                 if (typeof environmentDescription !== 'object') {
@@ -117,7 +117,7 @@ class Environment {
                 yield this.wait(POLL_INTERVAL);
             }
 
-            if (environmentDescription.Health !== 'Green') {
+            if (environmentDescription.Health !== 'Green' || environmentDescription.Status !== 'Ready') {
                 throw new Error(`${environmentName} is not healthy`);
             }
             process.stdout.write('\n');
