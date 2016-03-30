@@ -2,7 +2,6 @@ import test from 'ava';
 import sinon from 'sinon';
 import q from 'q';
 import 'babel-core/register';
-import 'babel-polyfill';
 import Archive from '../src/archive';
 
 /* Test alreadyUploaded */

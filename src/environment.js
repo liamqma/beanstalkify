@@ -117,7 +117,7 @@ class Environment {
                 yield this.wait(POLL_INTERVAL);
             }
 
-            if (environmentDescription.Health !== 'Green' || environmentDescription.Status !== 'Ready') {
+            if (environmentDescription !== 'object' || environmentDescription.Health !== 'Green' || environmentDescription.Status !== 'Ready') {
                 throw new Error(`${environmentName} is not healthy`);
             }
             process.stdout.write('\n');

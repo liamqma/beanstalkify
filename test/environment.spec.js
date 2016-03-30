@@ -2,7 +2,6 @@ import test from 'ava';
 import q from 'q';
 import sinon from 'sinon';
 import 'babel-core/register';
-import 'babel-polyfill';
 import Environment from '../src/environment';
 
 /* Test describeEnvironment */

@@ -1,4 +1,3 @@
-import "babel-polyfill";
 import Archive from './archive';
 import Environment from './environment';
 import deploymentInfo from './deployment-info';
