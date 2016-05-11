@@ -90,7 +90,7 @@ test('waitUtilHealthy() should wait until timeout if not healthy', t => {
 
     environment.waitUtilHealthy('foo').catch(error => {
         t.is(error.message, 'foo is not healthy');
-        t.is(waitStub.callCount, 24);
+        t.is(waitStub.callCount, 60);
     });
 });
 
