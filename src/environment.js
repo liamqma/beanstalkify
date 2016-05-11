@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 const POLL_INTERVAL = 5; // In seconds
 const STATUS_CHANGE_TIMEOUT = 1200; // In seconds
-const HEALTHY_TIMEOUT = 120; // In seconds
+const HEALTHY_TIMEOUT = 300; // In seconds
 
 class Environment {
 
