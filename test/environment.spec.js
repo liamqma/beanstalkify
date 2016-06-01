@@ -114,6 +114,7 @@ test('cleanApplicationVersions should delete versions not in use', function *(t)
     // Act
     const environment = new Environment(elasticbeanstalkStub);
     environment.deleteApplicationVersion = sinon.stub();
+    environment.wait = () => q();
     yield environment.cleanApplicationVersions('tech-website');
 
     // Assert

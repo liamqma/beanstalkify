@@ -191,6 +191,9 @@ class Environment {
 
                 winston.info(`Delete version: ${version}`);
 
+                // Put to sleep for 1 second between each deletion
+                yield this.wait(1);
+
                 yield this.deleteApplicationVersion({
                     ApplicationName: applicationName,
                     VersionLabel: version,
