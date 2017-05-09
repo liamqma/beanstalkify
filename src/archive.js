@@ -77,20 +77,24 @@ class Archive {
             throw new Error("Please make sure file name includes application name and version label separated by '-'. e.g. tech-website-1d595d3");
         }
         const versionLabel = baseName.pop(); // '4543cbf'
-        const applicationName = baseName.join('-'); // 'website-a'
-        return {archiveName, versionLabel, applicationName};
+        // const applicationName = baseName.join('-'); // 'website-a'
+        const bucketFolder = baseName;
+
+        return {archiveName, versionLabel, bucketFolder};
     }
 
     /**
      * Upload artifact to application and make application version available
      * @param {string} filePath - File path of the artifact
+     * @param {string} applicationName - Application name
      * @returns {Promise.<T>} Promise
      */
-    upload(filePath) {
+    upload(filePath, applicationName) {
 
         return q.async(function* () {
             // Step 1
-            const {archiveName, versionLabel, applicationName} = this.parse(filePath);
+            const {archiveName, versionLabel, bucketFolder} = this.parse(filePath);
+            const s3archive = bucketFolder + '/' + archiveName;
 
             // Step 2
             const ifAlreadyUploaded = yield this.alreadyUploaded(applicationName, versionLabel);
@@ -102,8 +106,8 @@ class Archive {
 
                 // Step 4,5,6
                 const {S3Bucket} = yield this.createStorageLocation();
-                yield this.uploadToS3(S3Bucket, archiveName, filePath);
-                yield this.makeApplicationVersionAvailableToBeanstalk(applicationName, versionLabel, archiveName, S3Bucket);
+                yield this.uploadToS3(S3Bucket, s3archive, filePath);
+                yield this.makeApplicationVersionAvailableToBeanstalk(applicationName, versionLabel, s3archive, S3Bucket);
             }
 
             return {archiveName, versionLabel, applicationName};

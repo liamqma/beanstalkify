@@ -25,7 +25,9 @@ var application = new Application(
 application.deploy(
 {
     archiveFilePath: 'PATH TO ZIP FILE',
-    environmentName: 'CNAME',
+    applicationName: 'Application Name',
+    environmentName: 'Environment Name',
+    cnamePrefix: 'CNAME', 
     awsStackName: '64bit Amazon Linux 2015.03 v2.0.0 running Node.js',
     beanstalkConfig: [
         Beanstalk options

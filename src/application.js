@@ -16,6 +16,14 @@ class Application {
         winston.level = 'info';
         q.longStackSupport = true;
 
+        /**
+        // To set globally
+        AWS.config.credentials =
+            new AWS.SharedIniFileCredentials({ profile: 'my_profile_name' });
+        // To set for a particular service client
+        var creds = new AWS.SharedIniFileCredentials({ profile: 'my_profile_name' });
+        var client = new AWS.EC2({ credentials: creds });
+        */
         // AWS Services
         this.s3 = new AWS.S3(credentials);
         this.elasticbeanstalk = new AWS.ElasticBeanstalk(credentials);
@@ -28,7 +36,9 @@ class Application {
     /**
      * @param {object} args - Arguments
      * @param {string} args.archiveFilePath - The path of archive to deploy (e.g. AppName-version.zip)
+     * @param {string} args.applicationName - Application to provision
      * @param {string} args.environmentName - Environment to provision (e.g. my-awesome-app)
+     * @param {string} args.cnamePrefix - Environment CNAME to provision
      * @param {string} args.awsStackName - Stack to provision (e.g. '64bit Amazon Linux 2015.03 v2.0.0 running Node.js')
      * @param {object} args.beanstalkConfig - Configuration overrides for the environment (optional)
      * @returns {promise} Promise
@@ -36,14 +46,16 @@ class Application {
     deploy(args) {
 
         const archivePath = args.archiveFilePath;
+        const applicationName = args.applicationName;
         const environmentName = args.environmentName;
+        const cnamePrefix = args.cnamePrefix;
         const stack = args.awsStackName;
         const config = args.beanstalkConfig;
 
         return q.async(function* () {
 
             // Upload artifact
-            const {versionLabel, applicationName} = yield this.archive.upload(archivePath);
+            const {versionLabel} = yield this.archive.upload(archivePath, applicationName);
 
             // Get environment status
             const env = yield this.environment.status(environmentName);
@@ -56,7 +68,7 @@ class Application {
                 yield this.environment.waitUntilStatusIsNot('Updating', environmentName);
             } else {
                 winston.info(`Create stack ${stack} for ${applicationName} - ${versionLabel}`);
-                yield this.environment.create(applicationName, environmentName, versionLabel, stack, config);
+                yield this.environment.create(applicationName, environmentName, cnamePrefix, versionLabel, stack, config);
                 yield this.environment.waitUntilStatusIsNot('Launching', environmentName);
             }
 
