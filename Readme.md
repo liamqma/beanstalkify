@@ -12,7 +12,7 @@ This is the node version of [Ruby Beanstalkify](https://github.com/pranavraja/be
 ## Usage
 
 ```javascript
-var Application = require('beanstalk');
+var Application = require('beanstalkify');
 var application = new Application(
     {
         accessKeyId: 'XXX',
