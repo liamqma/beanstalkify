@@ -30,6 +30,13 @@ application.deploy(
     beanstalkConfig: [
         Beanstalk options
         ....
+    ],
+    tags: [
+        {
+            Key: 'STRING_VALUE',
+            Value: 'STRING_VALUE'
+        },
+        /* more items */
     ]
 }
 ).then(function(data){

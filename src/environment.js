@@ -36,11 +36,12 @@ class Environment {
      * @param {string} applicationName
      * @param {string} environmentName
      * @param {string} versionLabel
-     * @param {object} stack
-     * @param {object} config
+     * @param {string} stack
+     * @param {array} config
+     * @param {array} tags
      * @returns {*}
      */
-    create(applicationName, environmentName, versionLabel, stack, config) {
+    create(applicationName, environmentName, versionLabel, stack, config, tags = []) {
         return q.async(function* () {
 
             const availability = yield this.checkDNSAvailability(environmentName);
@@ -57,7 +58,8 @@ class Environment {
                     EnvironmentName: environmentName,
                     SolutionStackName: stack,
                     OptionSettings: config,
-                    CNAMEPrefix: environmentName
+                    CNAMEPrefix: environmentName,
+                    Tags: tags
                 }
             );
 

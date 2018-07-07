@@ -31,6 +31,7 @@ class Application {
      * @param {string} args.environmentName - Environment to provision (e.g. my-awesome-app)
      * @param {string} args.awsStackName - Stack to provision (e.g. '64bit Amazon Linux 2015.03 v2.0.0 running Node.js')
      * @param {object} args.beanstalkConfig - Configuration overrides for the environment (optional)
+     * @param {object} args.tags - This specifies the tags applied to resources in the environment. (optional)
      * @returns {promise} Promise
      */
     deploy(args) {
@@ -39,6 +40,7 @@ class Application {
         const environmentName = args.environmentName;
         const stack = args.awsStackName;
         const config = args.beanstalkConfig;
+        const tags = args.tags;
 
         return q.async(function* () {
 
@@ -56,7 +58,7 @@ class Application {
                 yield this.environment.waitUntilStatusIsNot('Updating', environmentName);
             } else {
                 winston.info(`Create stack ${stack} for ${applicationName} - ${versionLabel}`);
-                yield this.environment.create(applicationName, environmentName, versionLabel, stack, config);
+                yield this.environment.create(applicationName, environmentName, versionLabel, stack, config, tags);
                 yield this.environment.waitUntilStatusIsNot('Launching', environmentName);
             }
 

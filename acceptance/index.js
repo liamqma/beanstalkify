@@ -24,6 +24,16 @@ application.deploy({
                 OptionName: 'NodeCommand',
                 Value: 'npm start'
             }
+        ],
+        tags: [
+            {
+                Key: 'tag1',
+                Value: 'foo'
+            },
+            {
+                Key: 'tag2',
+                Value: 'bar'
+            }
         ]
     }
 ).then(function (data) {
@@ -116,6 +126,6 @@ application.deploy({
 }).then(function () {
 
     // Comment this out if you want to manually checkout the environments created
-    //return application.deleteApplication('tech-website', true);
+    // return application.deleteApplication('tech-website', true);
 
 }).catch(console.error).done();
