@@ -33,7 +33,7 @@ class Environment {
     }
 
     /**
-     * @param {string} applicationName`
+     * @param {string} applicationName
      * @param {string} environmentName
      * @param {string} versionLabel
      * @param {string} stack
