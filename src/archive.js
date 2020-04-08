@@ -21,7 +21,7 @@ class Archive {
      */
     alreadyUploaded(applicationName, versionLabel) {
         return q.ninvoke(this.elasticbeanstalk, 'describeApplicationVersions', {ApplicationName: applicationName, VersionLabels: [versionLabel]})
-        .then(data => data.ApplicationVersions.length > 0);
+            .then(data => data.ApplicationVersions.length > 0);
     }
 
     /**
