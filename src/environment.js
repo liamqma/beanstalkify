@@ -41,7 +41,7 @@ class Environment {
      * @param {array} tags
      * @returns {*}
      */
-    create(applicationName, environmentName, versionLabel, stack, config, tags = []) {
+    create(applicationName, environmentName, versionLabel, stack, config, tags = [], tier = 'WebServer') {
         return q.async(function* () {
 
             const availability = yield this.checkDNSAvailability(environmentName);
@@ -49,18 +49,35 @@ class Environment {
                 throw (`DNS ${environmentName} is not available`);
             }
 
+            const options = tier === 'Worker' ? {
+                ApplicationName: applicationName,
+                VersionLabel: versionLabel,
+                EnvironmentName: environmentName,
+                SolutionStackName: stack,
+                OptionSettings: config,
+                Tags: tags,
+                Tier: {
+                    Name: tier,
+                    Type: 'SQS/HTTP'
+                }
+            } : {
+                ApplicationName: applicationName,
+                VersionLabel: versionLabel,
+                EnvironmentName: environmentName,
+                SolutionStackName: stack,
+                OptionSettings: config,
+                CNAMEPrefix: environmentName,
+                Tags: tags,
+                Tier: {
+                    Name: tier,
+                    Type: 'Standard'
+                }
+            };
+
             return q.ninvoke(
                 this.elasticbeanstalk,
                 'createEnvironment',
-                {
-                    ApplicationName: applicationName,
-                    VersionLabel: versionLabel,
-                    EnvironmentName: environmentName,
-                    SolutionStackName: stack,
-                    OptionSettings: config,
-                    CNAMEPrefix: environmentName,
-                    Tags: tags
-                }
+                options
             );
 
 
