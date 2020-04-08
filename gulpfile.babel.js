@@ -32,24 +32,28 @@ function lintGulpfile() {
     return lint('gulpfile.babel.js');
 }
 
-gulp.task('build', ['lint', 'clean'], () => {
-    gulp.src('./src/*')
-        .pipe(babel())
-        .pipe(gulp.dest('dist'));
-});
+// Lint our source code
+gulp.task('lint-src', lintSrc);
 
 // Remove the built files
-gulp.task('clean', () => {
+gulp.task('clean', (done) => {
     del.sync(['dist']);
+    done();
 });
 
 // Lint our test code
 gulp.task('lint-test', lintTest);
 
-// Lint our source code
-gulp.task('lint-src', lintSrc);
-
 // Lint this file
 gulp.task('lint-gulpfile', lintGulpfile);
 
-gulp.task('lint', ['lint-src', 'lint-test', 'lint-gulpfile']);
+// Link everything
+gulp.task('lint', gulp.series('lint-src', 'lint-test', 'lint-gulpfile'));
+
+gulp.task('build', gulp.series('lint', 'clean', (done) => {
+    gulp.src('./src/*')
+        .pipe(babel())
+        .pipe(gulp.dest('dist'));
+    done();
+}));
+

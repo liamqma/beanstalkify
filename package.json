@@ -7,7 +7,7 @@
     "url": "https://github.com/liamqma/beanstalkify.git"
   },
   "engines": {
-    "node": ">=4.4.1"
+    "node": ">=8.17.0"
   },
   "main": "dist/index.js",
   "files": [
@@ -27,25 +27,25 @@
   "dependencies": {
     "async": "^1.4.2",
     "aws-sdk": "^2.1.45",
-    "lodash": "^4.3.0",
+    "lodash": "^4.17.15",
     "q": "^1.4.1",
     "winston": "^1.0.1"
   },
   "devDependencies": {
     "ava": "^0.11.0",
     "babel-core": "^6.4.5",
-    "babel-eslint": "^4.1.6",
+    "babel-eslint": "^10.1.0",
     "babel-preset-es2015-node4": "^2.1.0",
     "babel-register": "^6.4.3",
-    "coveralls": "^2.11.6",
+    "coveralls": "^3.0.11",
     "del": "^2.0.0",
     "faker": "^3.0.1",
-    "gulp": "^3.9.0",
+    "gulp": "^4.0.2",
     "gulp-babel": "^6.1.1",
-    "gulp-eslint": "^1.0.0",
+    "gulp-eslint": "^6.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
-    "nyc": "^5.5.0",
+    "nyc": "^15.0.1",
     "request": "^2.69.0",
     "sinon": "^1.15.4"
   }
