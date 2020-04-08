@@ -7,7 +7,7 @@
     "url": "https://github.com/liamqma/beanstalkify.git"
   },
   "engines": {
-    "node": ">=4.4.1"
+    "node": ">=8.17.0"
   },
   "main": "dist/index.js",
   "files": [

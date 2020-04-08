@@ -32,6 +32,7 @@ function lintGulpfile() {
     return lint('gulpfile.babel.js');
 }
 
+// Lint our source code
 gulp.task('lint-src', lintSrc);
 
 // Remove the built files
@@ -43,11 +44,10 @@ gulp.task('clean', (done) => {
 // Lint our test code
 gulp.task('lint-test', lintTest);
 
-// Lint our source code
-
 // Lint this file
 gulp.task('lint-gulpfile', lintGulpfile);
 
+// Link everything
 gulp.task('lint', gulp.series('lint-src', 'lint-test', 'lint-gulpfile'));
 
 gulp.task('build', gulp.series('lint', 'clean', (done) => {
