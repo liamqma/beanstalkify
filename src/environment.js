@@ -39,6 +39,7 @@ class Environment {
      * @param {string} stack
      * @param {array} config
      * @param {array} tags
+     * @param {string} tier
      * @returns {*}
      */
     create(applicationName, environmentName, versionLabel, stack, config, tags = [], tier = 'WebServer') {
