@@ -56,7 +56,7 @@ class Application {
             // Otherwise, update environment with new version
             if (env) {
                 winston.info(`Deploying ${versionLabel} to ${environmentName}...`);
-                yield this.environment.deploy(versionLabel, environmentName, config);
+                yield this.environment.deploy(versionLabel, environmentName, stack, config);
                 yield this.environment.waitUntilStatusIsNot('Updating', environmentName);
             } else {
                 winston.info(`Create stack ${stack} for ${applicationName} - ${versionLabel}`);
