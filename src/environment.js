@@ -85,15 +85,19 @@ class Environment {
         }.bind(this))();
     }
 
-    deploy(versionLabel, environmentName, config) {
+    deploy(versionLabel, environmentName, stack, config) {
+        const updateConfig =  {
+            VersionLabel: versionLabel,
+            EnvironmentName: environmentName,
+            OptionSettings: config,
+        };
+        if (stack) {
+            updateConfig.SolutionStackName = stack;
+        }
         return q.ninvoke(
             this.elasticbeanstalk,
             'updateEnvironment',
-            {
-                VersionLabel: versionLabel,
-                EnvironmentName: environmentName,
-                OptionSettings: config
-            }
+            updateConfig
         );
     }
 
