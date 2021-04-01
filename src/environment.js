@@ -86,7 +86,7 @@ class Environment {
     }
 
     deploy(versionLabel, environmentName, stack, config) {
-        const updateConfig =  {
+        const updateConfig = {
             VersionLabel: versionLabel,
             EnvironmentName: environmentName,
             OptionSettings: config,
