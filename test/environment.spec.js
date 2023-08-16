@@ -12,7 +12,6 @@ test('describeEnvironment() should return environment description', async (t) =>
     const mockResponse = { Environments: [environmentDescription] };
 
     const elasticbeanstalkStub = {
-        // eslint-disable-next-line no-undef
         send: sinon.stub().returns(Promise.resolve(mockResponse))
     };
 
@@ -35,7 +34,6 @@ test('describeEnvironment() should return environment description', async (t) =>
 
     // Stub
     const mockClient = {
-        // eslint-disable-next-line no-undef
         send: sinon.stub().returns(Promise.resolve(mockData))
     };
 
@@ -127,12 +125,10 @@ test('cleanApplicationVersions should delete versions not in use', async (t) => 
     // Stub the send method with appropriate returns
     mockClient.send
         .withArgs(sinon.match.instanceOf(DescribeEnvironmentsCommand))
-    // eslint-disable-next-line no-undef
         .returns(Promise.resolve(mockEnvironmentsData));
 
     mockClient.send
         .withArgs(sinon.match.instanceOf(DescribeApplicationVersionsCommand))
-    // eslint-disable-next-line no-undef
         .returns(Promise.resolve(mockApplicationVersionsData));
 
     // Create a stub for the deleteApplicationVersion method
@@ -141,7 +137,6 @@ test('cleanApplicationVersions should delete versions not in use', async (t) => 
     // Act
     const environment = new Environment(mockClient);
     environment.deleteApplicationVersion = deleteStub;
-    // eslint-disable-next-line no-undef
     environment.wait = () => Promise.resolve();
 
     try {

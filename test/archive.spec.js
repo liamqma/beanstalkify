@@ -15,7 +15,6 @@ test('alreadyUploaded() should return true if version exists', async (t) => {
         ApplicationVersions: [1]
     };
 
-    // eslint-disable-next-line no-undef
     mockClient.send.withArgs(sinon.match.any).returns(Promise.resolve(mockData));
 
     // Act
@@ -36,7 +35,6 @@ test('alreadyUploaded() should return false if version does not exist', async (t
         ApplicationVersions: []
     };
 
-    // eslint-disable-next-line no-undef
     mockClient.send.withArgs(sinon.match.any).returns(Promise.resolve(mockData));
 
     // Act
@@ -56,7 +54,6 @@ test('describeApplicationVersions should receive proper arguments', async (t) =>
         send: (params) => {
             t.is(params.input.ApplicationName, applicationName);
             t.same(params.input.VersionLabels, [versionLabel]);
-            // eslint-disable-next-line no-undef
             return Promise.resolve({ ApplicationVersions: [] });
         }
     };
