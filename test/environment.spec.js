@@ -24,22 +24,28 @@ test('describeEnvironment() should return environment description', function *(t
 });
 
 /* Test status */
-test('describeEnvironment() should return environment description', function *(t) {
+test('describeEnvironment() should return environment description', async (t) => {
+
+    // Mock data
+    const mockData = {
+        Environments: [{ Status: 'Ready' }]
+    };
 
     // Stub
-    const elasticbeanstalkStub = {
-        describeEnvironments: sinon.stub()
+    const mockClient = {
+        // eslint-disable-next-line no-undef
+        send: sinon.stub().returns(Promise.resolve(mockData))
     };
-    elasticbeanstalkStub.describeEnvironments.yields(null, {Environments: [{Status: 'Ready'}]});
 
     // Act
-    const environment = new Environment(elasticbeanstalkStub);
-    const result = yield environment.status();
+    const environment = new Environment(mockClient);
+    const result = await environment.status();
 
     // Assert
-    t.same(result, 'Ready');
+    t.is(result, 'Ready');
 
 });
+
 
 /* Test create */
 test('create() should throw error if DNS is not available', t => {

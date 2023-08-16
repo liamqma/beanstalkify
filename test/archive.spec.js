@@ -1,6 +1,5 @@
 import test from 'ava';
 import sinon from 'sinon';
-import { DescribeApplicationVersionsCommand } from '@aws-sdk/client-elastic-beanstalk';
 import q from 'q';
 import 'babel-core/register';
 import Archive from '../src/archive';
@@ -26,8 +25,6 @@ test('alreadyUploaded() should return true if version exists', async (t) => {
     // Expect
     t.true(result);
 });
-
-
 
 test('alreadyUploaded() should return false if version does not exist', async (t) => {
     // Stub
