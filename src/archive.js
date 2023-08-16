@@ -1,7 +1,7 @@
-import q from 'q';
 import fs from 'fs';
 import path from 'path';
-import { DescribeApplicationVersionsCommand, CreateStorageLocationCommand } from "@aws-sdk/client-elastic-beanstalk";
+import { DescribeApplicationVersionsCommand, CreateStorageLocationCommand, CreateApplicationVersionCommand } from "@aws-sdk/client-elastic-beanstalk";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import winston from 'winston';
 
 class Archive {
@@ -49,7 +49,17 @@ class Archive {
      */
     uploadToS3(bucket, archiveName, filePath) {
         winston.info(`Uploading ${archiveName} to bucket ${bucket}...`);
-        return q.ninvoke(this.s3, 'putObject', {Bucket: bucket, Key: archiveName, Body: fs.readFileSync(filePath)});
+
+        const command = new PutObjectCommand({
+            Bucket: bucket,
+            Key: archiveName,
+            Body: fs.readFileSync(filePath)
+        });
+
+        return this.s3.send(command)
+            .then(response => {
+                return response;
+            });
     }
 
     /**
@@ -62,7 +72,8 @@ class Archive {
      */
     makeApplicationVersionAvailableToBeanstalk(applicationName, versionLabel, archiveName, bucket) {
         winston.info(`Making version ${versionLabel} of ${applicationName} available to Beanstalk...`);
-        return q.ninvoke(this.elasticbeanstalk, 'createApplicationVersion', {
+
+        const command = new CreateApplicationVersionCommand({
             ApplicationName: applicationName,
             VersionLabel: versionLabel,
             SourceBundle: {
@@ -71,6 +82,11 @@ class Archive {
             },
             AutoCreateApplication: true
         });
+
+        return this.elasticbeanstalk.send(command)
+            .then(response => {
+                return response;
+            });
     }
 
     /**
@@ -95,29 +111,32 @@ class Archive {
      * @returns {Promise.<T>} Promise
      */
     upload(filePath) {
+        // Step 1
+        const { archiveName, versionLabel, applicationName } = this.parse(filePath);
 
-        return q.async(function* () {
-            // Step 1
-            const {archiveName, versionLabel, applicationName} = this.parse(filePath);
+        // Step 2
+        return this.alreadyUploaded(applicationName, versionLabel)
+            .then(ifAlreadyUploaded => {
+                // Step 3
+                if (ifAlreadyUploaded) {
+                    winston.info(`${versionLabel} is already uploaded.`);
+                    return { alreadyUploaded: true, archiveName, versionLabel, applicationName };
+                }
 
-            // Step 2
-            const ifAlreadyUploaded = yield this.alreadyUploaded(applicationName, versionLabel);
-
-            // Step 3
-            if (ifAlreadyUploaded) {
-                winston.info(`${versionLabel} is already uploaded.`);
-            } else {
-
-                // Step 4,5,6
-                const {S3Bucket} = yield this.createStorageLocation();
-                yield this.uploadToS3(S3Bucket, archiveName, filePath);
-                yield this.makeApplicationVersionAvailableToBeanstalk(applicationName, versionLabel, archiveName, S3Bucket);
-            }
-
-            return {archiveName, versionLabel, applicationName};
-
-        }.bind(this))();
+                // Step 4
+                return this.createStorageLocation()
+                    .then(({ S3Bucket }) => {
+                        // Step 5
+                        return this.uploadToS3(S3Bucket, archiveName, filePath)
+                            .then(() => {
+                                // Step 6
+                                return this.makeApplicationVersionAvailableToBeanstalk(applicationName, versionLabel, archiveName, S3Bucket)
+                                    .then(() => ({ alreadyUploaded: false, archiveName, versionLabel, applicationName }));
+                            });
+                    });
+            });
     }
+
 }
 
 export default Archive;
