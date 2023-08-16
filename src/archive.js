@@ -1,6 +1,7 @@
 import q from 'q';
 import fs from 'fs';
 import path from 'path';
+import { DescribeApplicationVersionsCommand, CreateStorageLocationCommand } from "@aws-sdk/client-elastic-beanstalk";
 import winston from 'winston';
 
 class Archive {
@@ -19,9 +20,13 @@ class Archive {
      * @param {string} versionLabel
      * @returns {Promise.<Bool>}
      */
-    alreadyUploaded(applicationName, versionLabel) {
-        return q.ninvoke(this.elasticbeanstalk, 'describeApplicationVersions', {ApplicationName: applicationName, VersionLabels: [versionLabel]})
-            .then(data => data.ApplicationVersions.length > 0);
+    async alreadyUploaded(applicationName, versionLabel) {
+        const command = new DescribeApplicationVersionsCommand({
+            ApplicationName: applicationName,
+            VersionLabels: [versionLabel]
+        });
+
+        return this.elasticbeanstalk.send(command).then(data => data.ApplicationVersions.length > 0);
     }
 
     /**
@@ -29,7 +34,10 @@ class Archive {
      * @returns {Promise.<T>} Return {S3Bucket} The name of the Amazon S3 bucket created
      */
     createStorageLocation() {
-        return q.ninvoke(this.elasticbeanstalk, 'createStorageLocation');
+        const command = new CreateStorageLocationCommand({});
+
+        return this.elasticbeanstalk.send(command)
+            .then(data => data.S3Bucket);
     }
 
     /**
