@@ -6,23 +6,24 @@ import Environment from '../src/environment';
 import {DescribeApplicationVersionsCommand, DescribeEnvironmentsCommand} from '@aws-sdk/client-elastic-beanstalk';
 
 /* Test describeEnvironment */
-test('describeEnvironment() should return environment description', function *(t) {
-
+test('describeEnvironment() should return environment description', async (t) => {
     // Stub
+    const environmentDescription = { status: 'Ready' };
+    const mockResponse = { Environments: [environmentDescription] };
+
     const elasticbeanstalkStub = {
-        describeEnvironments: sinon.stub()
+        // eslint-disable-next-line no-undef
+        send: sinon.stub().returns(Promise.resolve(mockResponse))
     };
-    const environmentDescription = {status: 'Ready'};
-    elasticbeanstalkStub.describeEnvironments.yields(null, {Environments: [environmentDescription]});
 
     // Act
     const environment = new Environment(elasticbeanstalkStub);
-    const result = yield environment.describeEnvironment();
+    const result = await environment.describeEnvironment();
 
     // Assert
     t.same(result, environmentDescription);
-
 });
+
 
 /* Test status */
 test('describeEnvironment() should return environment description', async (t) => {
