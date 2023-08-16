@@ -47,22 +47,25 @@ test('alreadyUploaded() should return false if version does not exist', async (t
     t.false(result);
 });
 
-test('describeApplicationVersions should receive proper arguments', function *(t) {
+test('describeApplicationVersions should receive proper arguments', async (t) => {
     t.plan(2);
     const applicationName = 'Application Name';
     const versionLabel = 'Version Label';
+
     const elasticbeanstalkStub = {
-        describeApplicationVersions: (params, callback) => {
-            t.is(params.ApplicationName, applicationName);
-            t.same(params.VersionLabels, [versionLabel]);
-            callback(null, {ApplicationVersions: []});
+        send: (params) => {
+            t.is(params.input.ApplicationName, applicationName);
+            t.same(params.input.VersionLabels, [versionLabel]);
+            // eslint-disable-next-line no-undef
+            return Promise.resolve({ ApplicationVersions: [] });
         }
     };
 
     const archive = new Archive(elasticbeanstalkStub);
 
-    yield archive.alreadyUploaded(applicationName, versionLabel);
+    await archive.alreadyUploaded(applicationName, versionLabel);
 });
+
 
 /* Test parse */
 test('it should parse file name', t => {
