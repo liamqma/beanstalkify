@@ -1,35 +1,50 @@
 import test from 'ava';
 import sinon from 'sinon';
+import { DescribeApplicationVersionsCommand } from '@aws-sdk/client-elastic-beanstalk';
 import q from 'q';
 import 'babel-core/register';
 import Archive from '../src/archive';
 
 /* Test alreadyUploaded */
-test('alreadyUploaded() should return true if version exists', function *(t) {
+test('alreadyUploaded() should return true if version exists', async (t) => {
     // Stub
-    const elasticbeanstalkStub = {
-        describeApplicationVersions: sinon.stub()
+    const mockClient = {
+        send: sinon.stub()
     };
-    elasticbeanstalkStub.describeApplicationVersions.yields(null, {ApplicationVersions: [1]});
+
+    const mockData = {
+        ApplicationVersions: [1]
+    };
+
+    // eslint-disable-next-line no-undef
+    mockClient.send.withArgs(sinon.match.any).returns(Promise.resolve(mockData));
 
     // Act
-    const archive = new Archive(elasticbeanstalkStub);
-    const result = yield archive.alreadyUploaded();
+    const archive = new Archive(mockClient);
+    const result = await archive.alreadyUploaded();
 
     // Expect
     t.true(result);
 });
 
-test('alreadyUploaded() should return false if version does not exist', function *(t) {
+
+
+test('alreadyUploaded() should return false if version does not exist', async (t) => {
     // Stub
-    const elasticbeanstalkStub = {
-        describeApplicationVersions: sinon.stub()
+    const mockClient = {
+        send: sinon.stub()
     };
-    elasticbeanstalkStub.describeApplicationVersions.yields(null, {ApplicationVersions: []});
+
+    const mockData = {
+        ApplicationVersions: []
+    };
+
+    // eslint-disable-next-line no-undef
+    mockClient.send.withArgs(sinon.match.any).returns(Promise.resolve(mockData));
 
     // Act
-    const archive = new Archive(elasticbeanstalkStub);
-    const result = yield archive.alreadyUploaded();
+    const archive = new Archive(mockClient); // Assuming the constructor takes the client as an argument
+    const result = await archive.alreadyUploaded();
 
     // Expect
     t.false(result);

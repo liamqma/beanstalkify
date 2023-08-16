@@ -1,3 +1,4 @@
+import q from 'q';
 import fs from 'fs';
 import path from 'path';
 import { DescribeApplicationVersionsCommand, CreateStorageLocationCommand, CreateApplicationVersionCommand } from "@aws-sdk/client-elastic-beanstalk";
@@ -111,32 +112,29 @@ class Archive {
      * @returns {Promise.<T>} Promise
      */
     upload(filePath) {
-        // Step 1
-        const { archiveName, versionLabel, applicationName } = this.parse(filePath);
 
-        // Step 2
-        return this.alreadyUploaded(applicationName, versionLabel)
-            .then(ifAlreadyUploaded => {
-                // Step 3
-                if (ifAlreadyUploaded) {
-                    winston.info(`${versionLabel} is already uploaded.`);
-                    return { alreadyUploaded: true, archiveName, versionLabel, applicationName };
-                }
+        return q.async(function* () {
+            // Step 1
+            const {archiveName, versionLabel, applicationName} = this.parse(filePath);
 
-                // Step 4
-                return this.createStorageLocation()
-                    .then(({ S3Bucket }) => {
-                        // Step 5
-                        return this.uploadToS3(S3Bucket, archiveName, filePath)
-                            .then(() => {
-                                // Step 6
-                                return this.makeApplicationVersionAvailableToBeanstalk(applicationName, versionLabel, archiveName, S3Bucket)
-                                    .then(() => ({ alreadyUploaded: false, archiveName, versionLabel, applicationName }));
-                            });
-                    });
-            });
+            // Step 2
+            const ifAlreadyUploaded = yield this.alreadyUploaded(applicationName, versionLabel);
+
+            // Step 3
+            if (ifAlreadyUploaded) {
+                winston.info(`${versionLabel} is already uploaded.`);
+            } else {
+
+                // Step 4,5,6
+                const {S3Bucket} = yield this.createStorageLocation();
+                yield this.uploadToS3(S3Bucket, archiveName, filePath);
+                yield this.makeApplicationVersionAvailableToBeanstalk(applicationName, versionLabel, archiveName, S3Bucket);
+            }
+
+            return {archiveName, versionLabel, applicationName};
+
+        }.bind(this))();
     }
-
 }
 
 export default Archive;
