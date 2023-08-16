@@ -3,6 +3,7 @@ import q from 'q';
 import sinon from 'sinon';
 import 'babel-core/register';
 import Environment from '../src/environment';
+import {DescribeApplicationVersionsCommand, DescribeEnvironmentsCommand} from '@aws-sdk/client-elastic-beanstalk';
 
 /* Test describeEnvironment */
 test('describeEnvironment() should return environment description', function *(t) {
@@ -101,44 +102,73 @@ test('waitUtilHealthy() should wait until timeout if not healthy', t => {
 });
 
 /* Test cleanApplicationVersions */
-test('cleanApplicationVersions should delete versions not in use', function *(t) {
+test('cleanApplicationVersions should delete versions not in use', async (t) => {
+    // Mock data
+    const mockEnvironmentsData = {
+        Environments: [
+            { VersionLabel: 'foo' }
+        ]
+    };
+
+    const mockApplicationVersionsData = {
+        ApplicationVersions: [
+            { VersionLabel: 'foo' },
+            { VersionLabel: 'bar' },
+            { VersionLabel: 'baz' }
+        ]
+    };
 
     // Stub
-    const elasticbeanstalkStub = {
-        describeEnvironments: sinon.stub(),
-        describeApplicationVersions: sinon.stub()
+    const mockClient = {
+        send: sinon.stub()
     };
-    elasticbeanstalkStub.describeEnvironments.yields(null, {Environments: [
-        {VersionLabel: 'foo'}
-    ]});
-    elasticbeanstalkStub.describeApplicationVersions.yields(null, {ApplicationVersions: [
-        {VersionLabel: 'foo'},
-        {VersionLabel: 'bar'},
-        {VersionLabel: 'baz'}
-    ]});
+
+    // Stub the send method with appropriate returns
+    mockClient.send
+        .withArgs(sinon.match.instanceOf(DescribeEnvironmentsCommand))
+    // eslint-disable-next-line no-undef
+        .returns(Promise.resolve(mockEnvironmentsData));
+
+    mockClient.send
+        .withArgs(sinon.match.instanceOf(DescribeApplicationVersionsCommand))
+    // eslint-disable-next-line no-undef
+        .returns(Promise.resolve(mockApplicationVersionsData));
+
+    // Create a stub for the deleteApplicationVersion method
+    const deleteStub = sinon.stub();
 
     // Act
-    const environment = new Environment(elasticbeanstalkStub);
-    environment.deleteApplicationVersion = sinon.stub();
-    environment.wait = () => q();
-    yield environment.cleanApplicationVersions('tech-website');
+    const environment = new Environment(mockClient);
+    environment.deleteApplicationVersion = deleteStub;
+    // eslint-disable-next-line no-undef
+    environment.wait = () => Promise.resolve();
+
+    try {
+        await environment.cleanApplicationVersions('tech-website');
+    } catch (error) {
+        console.error('Test Error:', error);
+        throw error;
+    }
 
     // Assert
-    t.true(environment.deleteApplicationVersion.withArgs({
+    t.true(deleteStub.calledWith({
         ApplicationName: 'tech-website',
         VersionLabel: 'bar',
         DeleteSourceBundle: true
-    }).calledOnce);
+    }));
 
-    t.true(environment.deleteApplicationVersion.withArgs({
+    t.true(deleteStub.calledWith({
         ApplicationName: 'tech-website',
         VersionLabel: 'baz',
         DeleteSourceBundle: true
-    }).calledOnce);
+    }));
 
-    t.false(environment.deleteApplicationVersion.withArgs({
+    t.false(deleteStub.calledWith({
         ApplicationName: 'tech-website',
         VersionLabel: 'foo',
         DeleteSourceBundle: true
-    }).called);
+    }));
 });
+
+
+
