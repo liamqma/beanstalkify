@@ -1,13 +1,13 @@
 {
   "name": "beanstalkify",
-  "version": "3.0.0",
+  "version": "2.4.0",
   "description": "AWS Elastic Beanstalk automation",
   "repository": {
     "type": "git",
     "url": "https://github.com/liamqma/beanstalkify.git"
   },
   "engines": {
-    "node": ">=18.x.x"
+    "node": ">=8.17.0"
   },
   "main": "dist/index.js",
   "files": [
@@ -25,8 +25,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-elastic-beanstalk": "^3.388.0",
-    "@aws-sdk/client-s3": "^3.388.0",
+    "aws-sdk": "^2.7.16",
     "async": "^1.4.2",
     "lodash": "^4.17.15",
     "q": "^1.4.1",
