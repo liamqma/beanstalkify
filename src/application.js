@@ -1,8 +1,7 @@
 import Archive from './archive';
 import Environment from './environment';
 import deploymentInfo from './deployment-info';
-import { S3Client } from '@aws-sdk/client-s3';
-import { ElasticBeanstalkClient } from '@aws-sdk/client-elastic-beanstalk';
+import AWS from 'aws-sdk';
 import winston from 'winston';
 import q from 'q';
 
@@ -18,8 +17,8 @@ class Application {
         q.longStackSupport = true;
 
         // AWS Services
-        this.s3 = new S3Client(credentials);
-        this.elasticbeanstalk = new ElasticBeanstalkClient(credentials);
+        this.s3 = new AWS.S3(credentials);
+        this.elasticbeanstalk = new AWS.ElasticBeanstalk(credentials);
 
         // DI AWS Services
         this.environment = new Environment(this.elasticbeanstalk);
