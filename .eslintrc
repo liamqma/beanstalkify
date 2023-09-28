@@ -9,6 +9,9 @@ extends:
 parser:
     "babel-eslint"
 
+globals:
+    Promise: "readonly"
+
 rules:
     indent: [2, 4, {SwitchCase: 1}]
     brace-style: [2, "1tbs"]

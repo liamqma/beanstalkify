@@ -1,9 +1,9 @@
+import { S3Client } from '@aws-sdk/client-s3';
+import { ElasticBeanstalkClient, DeleteApplicationCommand } from '@aws-sdk/client-elastic-beanstalk';
 import Archive from './archive';
 import Environment from './environment';
 import deploymentInfo from './deployment-info';
-import AWS from 'aws-sdk';
 import winston from 'winston';
-import q from 'q';
 
 
 class Application {
@@ -14,11 +14,15 @@ class Application {
     constructor(credentials) {
         // Make debugging easy
         winston.level = 'info';
-        q.longStackSupport = true;
+
+        const creds = {
+            region: credentials.region,
+            credentials: credentials.credentials ? credentials.credentials : credentials,
+        };
 
         // AWS Services
-        this.s3 = new AWS.S3(credentials);
-        this.elasticbeanstalk = new AWS.ElasticBeanstalk(credentials);
+        this.s3 = new S3Client(creds);
+        this.elasticbeanstalk = new ElasticBeanstalkClient(creds);
 
         // DI AWS Services
         this.environment = new Environment(this.elasticbeanstalk);
@@ -35,8 +39,7 @@ class Application {
      * @param {object} args.tier - This specifies the tier ie WebServer (default) or Worker. (optional)
      * @returns {promise} Promise
      */
-    deploy(args) {
-
+    async deploy(args) {
         const archivePath = args.archiveFilePath;
         const environmentName = args.environmentName;
         const stack = args.awsStackName;
@@ -44,50 +47,45 @@ class Application {
         const tags = args.tags;
         const tier = args.tier || 'WebServer';
 
-        return q.async(function* () {
+        // Upload artifact
+        const { versionLabel, applicationName } = await this.archive.upload(archivePath);
 
-            // Upload artifact
-            const {versionLabel, applicationName} = yield this.archive.upload(archivePath);
+        // Get environment status
+        const env = await this.environment.status(environmentName);
 
-            // Get environment status
-            const env = yield this.environment.status(environmentName);
+        // If environment does not exist, create a new environment
+        // Otherwise, update environment with new version
+        if (env) {
+            winston.info(`Deploying ${versionLabel} to ${environmentName}...`);
+            await this.environment.deploy(versionLabel, environmentName, stack, config);
+            await this.environment.waitUntilStatusIsNot('Updating', environmentName);
+        } else {
+            winston.info(`Create stack ${stack} for ${applicationName} - ${versionLabel}`);
+            await this.environment.create(applicationName, environmentName, versionLabel, stack, config, tags, tier);
+            await this.environment.waitUntilStatusIsNot('Launching', environmentName);
+        }
 
-            // If environment does not exist, create a new environment
-            // Otherwise, update environment with new version
-            if (env) {
-                winston.info(`Deploying ${versionLabel} to ${environmentName}...`);
-                yield this.environment.deploy(versionLabel, environmentName, stack, config);
-                yield this.environment.waitUntilStatusIsNot('Updating', environmentName);
-            } else {
-                winston.info(`Create stack ${stack} for ${applicationName} - ${versionLabel}`);
-                yield this.environment.create(applicationName, environmentName, versionLabel, stack, config, tags, tier);
-                yield this.environment.waitUntilStatusIsNot('Launching', environmentName);
-            }
+        // Wait until environment is ready or timeout
+        const environmentDescription = await this.environment.waitUtilHealthy(environmentName);
 
-            // Wait until environment is ready or timeout
-            const environmentDescription = yield this.environment.waitUtilHealthy(environmentName);
-
-            // Return environment info to user
-            return deploymentInfo(environmentDescription);
-        }.bind(this))();
+        // Return environment info to user
+        return deploymentInfo(environmentDescription);
     }
 
-    terminateEnvironment() {
-        return this.environment.terminate.apply(this.environment, arguments);
+    terminateEnvironment(environmentName) {
+        return this.environment.terminate(environmentName);
     }
 
-    cleanApplicationVersions() {
-        return this.environment.cleanApplicationVersions.apply(this.environment, arguments);
+    cleanApplicationVersions(applicationName) {
+        return this.environment.cleanApplicationVersions(applicationName);
     }
 
     deleteApplication(applicationName, terminateEnvByForce = false) {
-        return q.ninvoke(
-            this.elasticbeanstalk,
-            'deleteApplication',
-            {
+        return this.elasticbeanstalk.send(
+            new DeleteApplicationCommand({
                 ApplicationName: applicationName,
-                TerminateEnvByForce: terminateEnvByForce
-            }
+                TerminateEnvByForce: terminateEnvByForce,
+            })
         );
     }
 }

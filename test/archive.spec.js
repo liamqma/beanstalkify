@@ -5,52 +5,64 @@ import 'babel-core/register';
 import Archive from '../src/archive';
 
 /* Test alreadyUploaded */
-test('alreadyUploaded() should return true if version exists', function *(t) {
+test('alreadyUploaded() should return true if version exists', async (t) => {
     // Stub
-    const elasticbeanstalkStub = {
-        describeApplicationVersions: sinon.stub()
+    const mockClient = {
+        send: sinon.stub()
     };
-    elasticbeanstalkStub.describeApplicationVersions.yields(null, {ApplicationVersions: [1]});
+
+    const mockData = {
+        ApplicationVersions: [1]
+    };
+
+    mockClient.send.withArgs(sinon.match.any).returns(Promise.resolve(mockData));
 
     // Act
-    const archive = new Archive(elasticbeanstalkStub);
-    const result = yield archive.alreadyUploaded();
+    const archive = new Archive(mockClient);
+    const result = await archive.alreadyUploaded();
 
     // Expect
     t.true(result);
 });
 
-test('alreadyUploaded() should return false if version does not exist', function *(t) {
+test('alreadyUploaded() should return false if version does not exist', async (t) => {
     // Stub
-    const elasticbeanstalkStub = {
-        describeApplicationVersions: sinon.stub()
+    const mockClient = {
+        send: sinon.stub()
     };
-    elasticbeanstalkStub.describeApplicationVersions.yields(null, {ApplicationVersions: []});
+
+    const mockData = {
+        ApplicationVersions: []
+    };
+
+    mockClient.send.withArgs(sinon.match.any).returns(Promise.resolve(mockData));
 
     // Act
-    const archive = new Archive(elasticbeanstalkStub);
-    const result = yield archive.alreadyUploaded();
+    const archive = new Archive(mockClient); // Assuming the constructor takes the client as an argument
+    const result = await archive.alreadyUploaded();
 
     // Expect
     t.false(result);
 });
 
-test('describeApplicationVersions should receive proper arguments', function *(t) {
+test('describeApplicationVersions should receive proper arguments', async (t) => {
     t.plan(2);
     const applicationName = 'Application Name';
     const versionLabel = 'Version Label';
+
     const elasticbeanstalkStub = {
-        describeApplicationVersions: (params, callback) => {
-            t.is(params.ApplicationName, applicationName);
-            t.same(params.VersionLabels, [versionLabel]);
-            callback(null, {ApplicationVersions: []});
+        send: (params) => {
+            t.is(params.input.ApplicationName, applicationName);
+            t.same(params.input.VersionLabels, [versionLabel]);
+            return Promise.resolve({ ApplicationVersions: [] });
         }
     };
 
     const archive = new Archive(elasticbeanstalkStub);
 
-    yield archive.alreadyUploaded(applicationName, versionLabel);
+    await archive.alreadyUploaded(applicationName, versionLabel);
 });
+
 
 /* Test parse */
 test('it should parse file name', t => {
