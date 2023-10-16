@@ -21,7 +21,7 @@
     "formatting:check": "prettier --check ./src",
     "formatting:write": "prettier --write ./src",
     "lint": "eslint ./src --ext .ts,.js",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run test && npm run build"
   },
   "keywords": [],
   "author": "",
