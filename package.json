@@ -10,6 +10,7 @@
     "node": ">=18.18.2"
   },
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "README.md",
     "dist/"
@@ -17,7 +18,6 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --verbose --runInBand --unhandled-rejections=strict --coverage",
-    "coveralls": "lcov-result-merger 'coverage/**/lcov.info' | ./node_modules/.bin/coveralls",
     "formatting:check": "prettier --check ./src",
     "formatting:write": "prettier --write ./src",
     "lint": "eslint ./src --ext .ts,.js",
