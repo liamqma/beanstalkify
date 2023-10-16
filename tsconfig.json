@@ -13,8 +13,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "rootDir": "./",
+    "rootDir": "./src",
     "sourceMap": false
   },
-  "include": ["./src/*.ts"]
+  "include": ["./src/**/*.ts"]
 }
