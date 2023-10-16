@@ -1,5 +1,5 @@
 [AWS Elastic Beanstalk](http://aws.amazon.com/elasticbeanstalk/) automation.
-This is the node version of [Ruby Beanstalkify](https://github.com/pranavraja/beanstalkify/) 
+This is the node version of [Ruby Beanstalkify](https://github.com/pranavraja/beanstalkify/)
 
 [![Build Status](https://travis-ci.org/liamqma/beanstalkify.svg?branch=master)](https://travis-ci.org/liamqma/beanstalkify)
 [![Coverage Status](https://coveralls.io/repos/liamqma/beanstalkify/badge.svg?branch=master&service=github)](https://coveralls.io/github/liamqma/beanstalkify?branch=master)
@@ -63,12 +63,12 @@ npm test
 }
 ```
 2. Run `node acceptance/index.js`
-3. It should create automatically two random elasticbeanstalk environments 
+3. It should create automatically two random elasticbeanstalk environments
 
 ## Change Log
 
-This project adheres to [Semantic Versioning](http://semver.org/).  
+This project adheres to [Semantic Versioning](http://semver.org/).
 Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/liamqma/beanstalkify/releases) page.
-  
+
 ## Contributors
 <table id="contributors"><tr><td width="25%"><img src=https://avatars.githubusercontent.com/u/4413219?v=3><a href="https://github.com/liamqma">liamqma</a></td><td width="25%"><img src=https://avatars2.githubusercontent.com/u/4636949?s=460&u=76bbb42e88cbb6315be84918b417a6d1831ac1f9&v=4><a href="https://github.com/lucascanavan">lucascanavan</a></td><td width="25%"><img src=https://avatars.githubusercontent.com/u/670701?v=3><a href="https://github.com/Maxwell2022">Maxwell2022</a></td><td width="25%"><img src=https://avatars.githubusercontent.com/u/46142?v=3><a href="https://github.com/joshhunt">joshhunt</a></td></tr></table>
