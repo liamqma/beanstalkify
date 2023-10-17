@@ -1,5 +1,5 @@
 import assert from 'assert';
-import axios from 'axios';
+import * as http from 'http';
 import _ from 'lodash';
 import { faker } from '@faker-js/faker';
 import Application from '../src/index';
@@ -17,12 +17,27 @@ const applicationName = 'tech-website';
 const versionLabel = 'e812ud';
 
 async function checkEnvironmentHealth(envUrl: string) {
-  try {
-    const response = await axios.get(`http://${envUrl}`);
-    assert.equal(response.status, 200);
-  } catch (error) {
-    console.error(`Failed health check for environment: ${envUrl}`);
-  }
+  return new Promise<void>((resolve, reject) => {
+    const request = http.get(`http://${envUrl}`, response => {
+      if (response.statusCode === 200) {
+        resolve();
+      } else {
+        reject(
+          new Error(
+            `Failed health check for environment: ${envUrl}. Status: ${response.statusCode}`,
+          ),
+        );
+      }
+    });
+
+    request.on('error', error => {
+      reject(
+        new Error(
+          `Failed health check for environment: ${envUrl}. Error: ${error.message}`,
+        ),
+      );
+    });
+  });
 }
 
 (async () => {

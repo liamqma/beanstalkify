@@ -1,0 +1,96 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+acceptance/credentials.json
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs
+lib-cov
+
+# Coverage directories
+coverage
+*.lcov
+.nyc_output
+
+.grunt
+
+# Bower and other dependencies
+bower_components
+node_modules/
+jspm_packages/
+web_modules/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional caches
+.npm
+.eslintcache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# npm pack output
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env*
+
+# Cache directories
+.cache
+.parcel-cache
+
+# Build outputs
+.next
+out
+.nuxt
+dist
+.vuepress/dist
+.temp
+.cache
+
+# Serverless, FuseBox, DynamoDB
+.serverless/
+.fusebox/
+.dynamodb/
+
+# TernJS and VSCode
+.tern-port
+.vscode-test
+
+# yarn v2 specific
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Misc
+.DS_Store
+.idea/
+build/
+dist/
