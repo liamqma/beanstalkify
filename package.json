@@ -1,5 +1,5 @@
 {
-  "name": "elasticsprout",
+  "name": "beanstalkify",
   "version": "3.0.0",
   "description": "AWS Elastic Beanstalk automation",
   "repository": {
