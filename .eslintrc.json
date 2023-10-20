@@ -1,0 +1,49 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "standard",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "globals": {
+    "describe": true,
+    "it": true,
+    "expect": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/interface-name-prefix": 0,
+    "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-undef": "error",
+    "import/default": 0,
+    "import/namespace": 0,
+    "import/named": 0,
+    "import/no-unresolved": 0,
+    "prettier/prettier": "warn",
+    "import/no-named-as-default-member": 0,
+    "import/dynamic-import-chunkname": 0,
+    "import/order": "warn",
+    "no-console": ["error", { "allow": ["info", "error"] }],
+    "dot-notation": 0,
+    "no-throw-literal": 0
+  }
+}

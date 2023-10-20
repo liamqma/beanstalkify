@@ -1,8 +1,8 @@
-export default (environmentDescription) => {
+export default (environmentDescription: any) => {
     return {
         app_name: environmentDescription.ApplicationName,
         app_version: environmentDescription.VersionLabel,
         env_name: environmentDescription.EnvironmentName,
-        env_url: environmentDescription.CNAME
+        env_url: environmentDescription.CNAME,
     };
 };
