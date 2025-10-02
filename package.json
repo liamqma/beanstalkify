@@ -1,6 +1,6 @@
 {
   "name": "beanstalkify",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "AWS Elastic Beanstalk automation",
   "repository": {
     "type": "git",
@@ -29,8 +29,7 @@
   "dependencies": {
     "@aws-sdk/client-elastic-beanstalk": "^3.428.0",
     "@aws-sdk/client-s3": "^3.428.0",
-    "lodash": "^4.17.21",
-    "winston": "^3.11.0"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",
